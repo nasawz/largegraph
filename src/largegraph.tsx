@@ -1,0 +1,1 @@
+// https://github.com/antvis/G6/blob/master/packages/site/site/pages/largegraph.zh.tsx

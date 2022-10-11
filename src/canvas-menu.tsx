@@ -1,0 +1,1 @@
+// https://github.com/antvis/G6/blob/master/packages/site/site/pages/canvas-menu.tsx
