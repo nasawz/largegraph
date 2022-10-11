@@ -4,6 +4,7 @@ go get github.com/pocketbase/pocketbase
 
 ## start
 go run main.go serve
+npm start
 
 ## ref
 
