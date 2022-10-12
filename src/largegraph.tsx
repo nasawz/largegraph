@@ -975,6 +975,9 @@ const LargeGraph = () => {
                     if (container && container.current) {
                         CANVAS_WIDTH = container.current.offsetWidth;
                         CANVAS_HEIGHT = container.current.offsetHeight;
+
+                        console.log('CANVAS_HEIGHT',CANVAS_HEIGHT);
+                        
                     }
 
                     originData = data;
@@ -1230,6 +1233,10 @@ const LargeGraph = () => {
                     graph.data({ nodes: aggregatedData.nodes, edges: processedEdges });
                     graph.render();
                     setGraphInstance(graph);
+
+                    var ev = new Event("resize");
+
+                    window.dispatchEvent(ev);
                 });
         }
     });
@@ -1247,9 +1254,11 @@ const LargeGraph = () => {
 
     if (typeof window !== 'undefined')
         window.onresize = () => {
+            
             if (container && container.current) {
+                console.log( container.current.offsetHeight);
                 CANVAS_WIDTH = container.current.offsetWidth;
-                CANVAS_HEIGHT = container.current.offsetHeight;
+                CANVAS_HEIGHT = container.current.clientHeight;
             }
             if (graph && layout.instance) {
                 layout.instance.center = [CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2];
@@ -1260,7 +1269,7 @@ const LargeGraph = () => {
         <>
             <div
                 ref={container}
-                style={{ backgroundColor: '#2b2f33', height: 'calc(100vh - 100px)', width: '70%' }}
+                style={{ backgroundColor: '#2b2f33', height: '100vh', width: '100%' }}
             />
             {/* <LegendPanel /> */}
             {graphInstance && (

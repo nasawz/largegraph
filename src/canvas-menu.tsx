@@ -22,7 +22,7 @@ if (isBrowser) {
     position: absolute;
     z-index: 2;
     left: 16px;
-    top: 80px;
+    top: 16px;
     width: fit-content;
     padding: 8px 16px;
     background-color: rgba(54, 59, 64, 0);
@@ -81,6 +81,8 @@ if (isBrowser) {
     border-radius: 8px;
     font-size: 12px;
     height: fit-content;
+    top:0;
+    left:0;
     font-family: PingFangSC-Semibold;
     transition: all 0.2s linear;
   }
@@ -221,7 +223,7 @@ const CanvasMenu: React.FC<{
     });
     const tipDom = document.getElementById('g6-canavs-menu-item-tip');
     modifyCSS(tipDom, {
-      top: `${124}px`,
+      top: `${56}px`,
       left: `${x - 20}px`,
       zIndex: 100,
     });
