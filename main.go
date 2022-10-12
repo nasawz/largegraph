@@ -1,7 +1,6 @@
 package main
 
 import (
-	"embed"
 	"log"
 	"net/http"
 
@@ -11,23 +10,15 @@ import (
 	"github.com/pocketbase/pocketbase/core"
 )
 
-//go:embed pb_public
-var content embed.FS
-
-// func handler() http.Handler {
-
-//     fsys := fs.FS(content)
-//     html, _ := fs.Sub(fsys, "public")
-
-//     return http.FileServer(http.FS(html))
-// }
+// //go:embed pb_public
+// var content embed.FS
 
 func main() {
 	app := pocketbase.New()
 
 	app.OnBeforeServe().Add(func(e *core.ServeEvent) error {
 		// serves static files from the provided public dir (if exists)
-		subFs := echo.MustSubFS(content, "pb_public")
+		subFs := echo.MustSubFS(e.Router.Filesystem, "pb_public")
 		e.Router.GET("/*", apis.StaticDirectoryHandler(subFs, false))
 
 		// redirect to homepage on missing file
@@ -42,13 +33,38 @@ func main() {
 		return nil
 	})
 
+	// app.OnBeforeServe().Add(func(e *core.ServeEvent) error {
+	// 	// serves static files from the provided public dir (if exists)
+	// 	subFs := echo.MustSubFS(content, "pb_public")
+	// 	e.Router.GET("/*", apis.StaticDirectoryHandler(subFs, false))
+
+	// 	// redirect to homepage on missing file
+	// 	originalErrorHandler := e.Router.HTTPErrorHandler
+	// 	e.Router.HTTPErrorHandler = func(c echo.Context, err error) {
+	// 		if c.Path() == "/*" && err == echo.ErrNotFound {
+	// 			err = c.Redirect(http.StatusTemporaryRedirect, "/")
+	// 		}
+	// 		originalErrorHandler(c, err)
+	// 	}
+
+	// 	return nil
+	// })
+
 	app.OnBeforeServe().Add(func(e *core.ServeEvent) error {
 		// add new "GET /api/hello" route to the app router (echo)
 		e.Router.AddRoute(echo.Route{
 			Method: http.MethodGet,
 			Path:   "/api/hello",
 			Handler: func(c echo.Context) error {
-				return c.String(200, "Hello world!")
+				type User struct {
+					Name  string `json:"name" xml:"name"`
+					Email string `json:"email" xml:"email"`
+				}
+				u := &User{
+					Name:  "Jon",
+					Email: "jon@labstack.com",
+				}
+				return c.JSON(http.StatusOK, u)
 			},
 			Middlewares: []echo.MiddlewareFunc{
 				apis.RequireGuestOnly(),
@@ -61,4 +77,5 @@ func main() {
 	if err := app.Start(); err != nil {
 		log.Fatal(err)
 	}
+
 }
