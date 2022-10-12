@@ -2,7 +2,8 @@
   "name": "largegraph",
   "version": "1.0.0",
   "scripts": {
-    "start": "parcel watch src/index.html --out-dir pb_public --hmr-port 8080"
+    "start": "parcel watch src/index.html --out-dir pb_public --hmr-port 8080",
+    "build": "parcel build src/index.html --out-dir pb_public --no-source-maps"
   },
   "license": "MIT",
   "devDependencies": {

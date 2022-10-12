@@ -4,7 +4,11 @@ go get github.com/pocketbase/pocketbase
 
 ## start
 go run main.go serve
-npm start
+yarn start
+
+## build
+yarn build
+go build -o main.exe main.go
 
 ## ref
 

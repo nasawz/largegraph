@@ -16,6 +16,8 @@ let findShortestPath: any = null;
 
 if (isBrowser) {
     labelPropagation = G6.Algorithm.labelPropagation;
+    // LOUVAIN 自动聚类算法。优势：根据节点间的紧密程度计算
+    // 参考资料：https://en.wikipedia.org/wiki/Louvain_method
     louvain = G6.Algorithm.louvain;
     findShortestPath = G6.Algorithm.findShortestPath;
     insertCss(`
@@ -975,9 +977,6 @@ const LargeGraph = () => {
                     if (container && container.current) {
                         CANVAS_WIDTH = container.current.offsetWidth;
                         CANVAS_HEIGHT = container.current.offsetHeight;
-
-                        console.log('CANVAS_HEIGHT',CANVAS_HEIGHT);
-                        
                     }
 
                     originData = data;
@@ -1022,6 +1021,7 @@ const LargeGraph = () => {
 
                     data.edges.forEach((edge) => {
                         edge.label = `${edge.source}-${edge.target}`;
+                        // edge.label = `${edge.value}`;
                         edge.id = uniqueId('edge');
                     });
 
@@ -1057,18 +1057,28 @@ const LargeGraph = () => {
                                 if (itemType === 'node') {
                                     if (model.level !== 0) {
                                         return `<ul>
-                      <li id='expand'>${'展开该聚合点'}</li>
-                      <li id='hide'>${'隐藏该节点'}</li>
-                    </ul>`;
-                                    } else {
-                                        return `<ul>
-                      <li id='collapse'>${'聚合所属聚类'}</li>
-                      <li id='neighbor-1'>${'扩展一度关系'}</li>
-                      <li id='neighbor-2'>${'扩展二度关系'}</li>
-                      <li id='neighbor-3'>${'扩展三度关系'}</li>
-                      <li id='hide'>${'隐藏该节点'}</li>
-                    </ul>`;
-                                    }
+                                        <li id='expand'>${'展开该聚合点'}</li>
+                                        <li id='hide'>${'隐藏该节点'}</li>
+                                      </ul>`;
+                                                      } else {
+                                                          return `<ul>
+                                        <li id='collapse'>${'聚合所属聚类'}</li>
+                                        <li id='hide'>${'隐藏该节点'}</li>
+                                      </ul>`;
+                                                      }
+                    //                     return `<ul>
+                    //   <li id='expand'>${'展开该聚合点'}</li>
+                    //   <li id='hide'>${'隐藏该节点'}</li>
+                    // </ul>`;
+                    //                 } else {
+                    //                     return `<ul>
+                    //   <li id='collapse'>${'聚合所属聚类'}</li>
+                    //   <li id='neighbor-1'>${'扩展一度关系'}</li>
+                    //   <li id='neighbor-2'>${'扩展二度关系'}</li>
+                    //   <li id='neighbor-3'>${'扩展三度关系'}</li>
+                    //   <li id='hide'>${'隐藏该节点'}</li>
+                    // </ul>`;
+                    //                 }
                                 } else {
                                     return `<ul>
                     <li id='hide'>${'隐藏该边'}</li>
@@ -1256,7 +1266,6 @@ const LargeGraph = () => {
         window.onresize = () => {
             
             if (container && container.current) {
-                console.log( container.current.offsetHeight);
                 CANVAS_WIDTH = container.current.offsetWidth;
                 CANVAS_HEIGHT = container.current.clientHeight;
             }
